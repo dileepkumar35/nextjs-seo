@@ -13,7 +13,7 @@ function Test() {
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "https://gtlcdnstorage.blob.core.windows.net/guide/stylesheets/guide.css";
+    link.href = "https://gtlcdnstorage.blob.core.windows.net/guide/stylesheets/prod/guide.css";
     link.id = "external-css";
     
     if (!document.getElementById("external-css")) {
