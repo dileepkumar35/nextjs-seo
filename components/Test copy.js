@@ -2,24 +2,19 @@
 
 import React, { useEffect, useState } from 'react'
 import { parseHtmlSanitizeAddTargetToLinks } from '../utils/utils-production-optimizedv2.3'
-import html from './content'
+// import html from './content'
 
 function Test() {
-  const [isClient, setIsClient] = useState(false);
-
   useEffect(() => {
-    // Mark as client-side rendered
-    setIsClient(true);
-
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "https://gtlcdnstorage.blob.core.windows.net/guide/stylesheets/guide.css";
+    link.href = "https://gtlcdnstorage.blob.core.windows.net/guide/stylesheets/prod/guide.css";
     link.id = "external-css";
-    
+
     if (!document.getElementById("external-css")) {
       document.head.appendChild(link);
     }
-    
+
     return () => {
       document.getElementById("external-css")?.remove(); // Cleanup on unmount
     };
@@ -31,8 +26,7 @@ function Test() {
     setSearchTerm(e.target.value);
   }
 
-
-    const html = `<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html lang='en'>
 
 <head>
@@ -5409,43 +5403,6 @@ function Test() {
 </body>
 
 </html> `
-
-  // Don't render the content until we're on the client side
-  if (!isClient) {
-    return (
-      <div className='App'>
-        <header className='App-header' style={{ padding: '20px' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            marginBottom: '20px'
-          }}>
-            <input
-              type="text"
-              value=""
-              onChange={() => {}}
-              style={{
-                padding: '10px',
-                width: '300px',
-                borderRadius: '4px',
-                border: '1px solid #ccc',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                fontSize: '14px'
-              }}
-              placeholder="Search..."
-            />
-          </div>
-          <div style={{ textAlign: 'left' }}>
-            Loading...
-          </div>
-        </header>
-      </div>
-    );
-  }
-
-  function handleSearchChange(e) {
-    setSearchTerm(e.target.value);
-  }
 
   return (
     <div className='App'>

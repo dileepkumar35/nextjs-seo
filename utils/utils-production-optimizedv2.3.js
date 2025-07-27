@@ -1,12 +1,19 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import DOMPurify from 'dompurify'
 import parse from 'html-react-parser'
+
+// Dynamic import for DOMPurify to avoid SSR issues
+let DOMPurify;
+if (typeof window !== 'undefined') {
+  import('dompurify').then(module => {
+    DOMPurify = module.default;
+  });
+}
 
 // Improved highlighting function
 export const highlightText = (html, searchQuery) => {
-  if (!searchQuery || typeof html !== 'string') return html;
+  if (!searchQuery || typeof html !== 'string' || typeof window === 'undefined') return html;
 
   // Create a temporary div to parse HTML
   const tempDiv = document.createElement('div');
@@ -324,10 +331,12 @@ const HtmlContent = ({ content, searchQuery, baseUrl }) => {
   }, [])
 
   // Allow target, rel, class, id, name, and href attributes during sanitization
-  const cleanHtml = DOMPurify.sanitize(highlightedContent, {
-    ADD_ATTR: ['target', 'rel', 'class', 'id', 'name', 'href'],
-    ADD_TAGS: ['mark'], // Explicitly allow mark tags
-  })
+  const cleanHtml = typeof window !== 'undefined' && DOMPurify 
+    ? DOMPurify.sanitize(highlightedContent, {
+        ADD_ATTR: ['target', 'rel', 'class', 'id', 'name', 'href'],
+        ADD_TAGS: ['mark'], // Explicitly allow mark tags
+      })
+    : highlightedContent; // Fallback for SSR
 
   // Parse the sanitized HTML - simplified to work with tab management
   const parsedContent = parse(cleanHtml, {
